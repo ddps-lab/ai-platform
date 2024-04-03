@@ -34,6 +34,7 @@ def getPrediction(filename):
     class_names = ['daisy', 'dandelion', 'roses', 'sunflowers', 'tulips']
     
     result = [(label, str(np.round(acc * 100, 4)) + '%') for (label, acc) in zip(class_names, score)]
+    result = sorted(result, key=lambda x: x[1], reverse=True)
     return result
 
 
