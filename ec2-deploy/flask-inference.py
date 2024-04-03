@@ -28,7 +28,7 @@ def getPrediction(filename):
     img_array = img_to_array(image)
     img_array = tf.expand_dims(img_array, 0)
     
-    predictions = load_model.predict(img_array)
+    predictions = inference_model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
     class_names = ['daisy', 'dandelion', 'roses', 'sunflowers', 'tulips']
