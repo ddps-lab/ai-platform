@@ -55,15 +55,18 @@ if __name__ == "__main__":
     ])
 
     #모델 컴파일
-    model.compile(optimizer='adam',
-                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-                  metrics=['accuracy'])
+   model.compile(optimizer='adam',
+              loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
+              metrics=[tf.keras.metrics.Precision(name='precision'), 
+                       tf.keras.metrics.Recall(name='recall'), 
+                       tf.keras.metrics.F1Score(name='f1_score')])
 
     # 모델 훈련
     history = model.fit(
         train_ds,
         validation_data=val_ds,
-        epochs=args.epochs
+        epochs=args.epochs,
+        verbose=2
     )
 
     if args.current_host == args.hosts[0]:
