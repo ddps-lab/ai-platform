@@ -55,7 +55,7 @@ if __name__ == "__main__":
     ])
 
     #모델 컴파일
-   model.compile(optimizer='adam',
+    model.compile(optimizer='adam',
               loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
               metrics=[tf.keras.metrics.Precision(name='precision'), 
                        tf.keras.metrics.Recall(name='recall'), 
