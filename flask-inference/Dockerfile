@@ -7,7 +7,7 @@ RUN pip3 install --upgrade pip
 
 WORKDIR /home
 RUN git clone https://github.com/ddps-lab/ai-platform.git
-WORKDIR flask-inference/
+WORKDIR ai-platform/flask-inference/
 
 RUN mkdir -p static/uploads
 
