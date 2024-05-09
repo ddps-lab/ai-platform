@@ -12,5 +12,6 @@ WORKDIR ai-platform/flask-inference/
 RUN mkdir -p static/uploads
 
 RUN pip3 install -r requirements.txt
+RUN pip install urllib3==1.26.6
 
 CMD ["python3", "main.py"]
