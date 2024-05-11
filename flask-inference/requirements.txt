@@ -1,6 +1,6 @@
 Flask
 werkzeug
 numpy
-tensorflow
+tensorflow-cpu
 pillow
 urllib3==1.26.6
