@@ -11,6 +11,6 @@ WORKDIR ai-platform/flask-inference/
 
 RUN mkdir -p static/uploads
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --no-cache-dir
 
 CMD ["python3", "main.py"]
