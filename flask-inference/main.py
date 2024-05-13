@@ -3,11 +3,15 @@ from werkzeug.utils import secure_filename
 
 import os
 import requests
-import time
 import json
+import numpy as np
 
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions, MobileNetV2
+import tensorflow as tf
+
+from tensorflow import keras
+
+from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.models import load_model
 
 UPLOAD_FOLDER = 'static/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -16,18 +20,21 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "secret key"
 
-inference_model = MobileNetV2()
-
+# 학습된 모델 로드
+inference_model = load_model('flower_model.keras')
 
 def getPrediction(filename):
-    image = load_img('static/uploads/' + filename, target_size=(224, 224))
-    image = img_to_array(image)
-    image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-    image = preprocess_input(image)
+    image = keras.utils.load_img('static/uploads/' + filename, target_size=(180, 180))
+    img_array = img_to_array(image)
+    img_array = tf.expand_dims(img_array, 0)
+    
+    predictions = inference_model.predict(img_array)
+    score = tf.nn.softmax(predictions[0])
 
-    all_result = inference_model.predict(image)
-    result = decode_predictions(all_result)[0]
-    result = [(img_class, label, str(round(acc * 100, 4)) + '%') for img_class, label, acc in result]
+    class_names = ['daisy', 'dandelion', 'roses', 'sunflowers', 'tulips']
+    
+    result = [(label, str(np.round(acc * 100, 4)) + '%') for (label, acc) in zip(class_names, score)]
+    result = sorted(result, key=lambda x: x[1], reverse=True)
     return result
 
 
@@ -93,8 +100,8 @@ def submit_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             result = getPrediction(filename)
             for top_result in result:
+                flash(top_result[0])
                 flash(top_result[1])
-                flash(top_result[2])
             get_instance_info()
             return render_template('index.html', filename=filename)
         else:
@@ -105,28 +112,6 @@ def submit_file():
 @app.route('/display/<filename>')
 def display_image(filename):
     return redirect(url_for('static', filename='uploads/' + filename), code=301)
-
-
-@app.route('/predict', methods=['GET', 'POST'])
-def curl_test():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return 'A'
-        file = request.files['file']
-        if file.filename == '':
-            return 'B'
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            result = getPrediction(filename)
-            return f"{result}"
-        else:
-            return 'Allowed image types are -> png, jpg, jpeg, gif'
-    elif request.method == 'GET':
-        return "GET Return"
-    else:
-        return "Not Matched Methods"
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
