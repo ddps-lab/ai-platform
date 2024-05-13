@@ -8,6 +8,7 @@ RUN pip3 install --upgrade pip
 WORKDIR /home
 RUN git clone https://github.com/ddps-lab/ai-platform.git
 WORKDIR ai-platform/flask-inference/
+COPY flower_model.keras .
 
 RUN mkdir -p static/uploads
 
