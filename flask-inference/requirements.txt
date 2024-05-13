@@ -2,4 +2,3 @@ Flask
 numpy
 tensorflow==2.15.0
 pillow
-urllib3==1.26.6
