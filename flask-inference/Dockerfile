@@ -1,8 +1,8 @@
-FROM amazonlinux:2
+ROM ubuntu:22.04
 
-RUN yum update -y
-RUN yum install git -y
-RUN yum install python3-pip -y
+RUN apt update -y
+RUN apt install git -y
+RUN apt install python3-pip -y
 RUN pip3 install --upgrade pip
 
 WORKDIR /home
