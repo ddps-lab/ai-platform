@@ -2,5 +2,5 @@ Flask
 werkzeug
 pillow==9.5.0
 requests-toolbelt
-numpy==1.22.0
-tensorflow-cpu==2.11.1
+numpy
+tensorflow-cpu==2.15.0
