@@ -6,7 +6,10 @@ RUN yum update -y && \
     pip3 install --upgrade pip
 
 RUN git clone https://github.com/ddps-lab/ai-platform.git
-WORKDIR ai-platform/serverless-inference/
+WORKDIR ai-platform/serverless-inference/lambda-image-build/
+
+#Download the model from the S3 bucket below:
+#s3://ai-platform-flower-model/flower_model.keras .
 COPY flower_model.keras .
 
 RUN mkdir -p static/uploads
