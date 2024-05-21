@@ -10,8 +10,6 @@ import tensorflow as tf
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.models import load_model
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-
 # 학습된 모델 로드
 model = load_model('flower_model.keras')
 
@@ -24,7 +22,6 @@ def multipart_to_input(multipart_data):
     img = Image.open(img)
     img = img.resize((180, 180), Image.ANTIALIAS)
     img = np.array(img)
-    
     img = img.reshape((1, img.shape[0], img.shape[1], img.shape[2]))
     return img
 
